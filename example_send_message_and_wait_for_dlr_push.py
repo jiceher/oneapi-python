@@ -22,6 +22,7 @@ parser.add_argument("sender", help="Sender address")
 parser.add_argument("-p", "--port", help="local port for delivery notification")
 parser.add_argument("-d", "--data_format", help="Type of data used in request, can be url or json (default=url)")
 parser.add_argument("-a", "--accept", help="Type of data used for response, can be url or json (default=url)")
+parser.add_argument("-i", "--ipv4", help="Use strict ipv4 address", action="store_true")
 args = parser.parse_args()
 
 data_format = "url"
@@ -46,7 +47,10 @@ sms.sender_address = args.sender
 sms.address = args.address
 sms.message = 'Test message'
 # The url where the delivery notification will be pushed:
-sms.notify_url = 'http://{}:{}'.format('localhost', port)
+if args.ipv4:
+    sms.notify_url = 'http://{}:{}'.format('127.0.0.1', port)
+else:
+    sms.notify_url = 'http://{}:{}'.format('localhost', port)
 sms.callback_data = 'any+string'
 # ----------------------------------------------------------------------------------------------------
 
