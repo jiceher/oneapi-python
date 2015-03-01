@@ -56,6 +56,10 @@ sms.callback_data = 'any+string'
 
 result = sms_client.send_sms(sms, header, data_format)
 
+if result == False:
+    print 'Error sending message'
+    sys.exit(1)
+
 if not result.is_success():
     print 'Error sending message:', result.exception
     sys.exit(1)

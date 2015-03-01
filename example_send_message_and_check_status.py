@@ -48,15 +48,17 @@ sms.notify_url = 'Any URL'
 
 # example:send-message
 result = sms_client.send_sms(sms, header, data_format)
-# store client correlator because we can later query for the delivery status with it:
-client_correlator = result.client_correlator
-# ----------------------------------------------------------------------------------------------------
+if result == False:
+    print 'Error sending message'
+    sys.exit(1)
 
 if not result.is_success():
     print 'Error sending message:', result.exception
     sys.exit(1)
 
 print result
+# store client correlator because we can later query for the delivery status with it:
+client_correlator = result.client_correlator
 print 'Is success = ', result.is_success()
 print 'Sender = ', result.sender
 print 'Client correlator = ', result.client_correlator
