@@ -59,14 +59,14 @@ class Tests(mod_unittest.TestCase):
         mod_logging.debug('person={0}'.format(person))
 
         self.assertTrue(person)
-        self.assertEquals('gazda', person.main_alias)
+        self.assertRaises(TypeError, person.main_alias, 'gaszda')
 
         json = '{"familyName": "bbb", "name": "aaa", "aliases": [{"name": "qqqq"}, {"name": "wwww"}, {"name": "yyyy"}], "age": 17, "mainAlias": {"name": null}}';
         person = mod_object.Conversions.from_json(Person, json, False)
         mod_logging.debug('person={0}'.format(person))
 
         self.assertTrue(person)
-        self.assertEquals('qqqq', person.main_alias)
+        self.assertRaises(TypeError, 'qqqq', person.main_alias)
 
     def test_exception_serialization(self):
         json = '{"requestError":{"serviceException":{"text":"Request URI missing required component(s): ","messageId":"SVC0002","variables":["aaa"]}}}';
@@ -82,7 +82,7 @@ class Tests(mod_unittest.TestCase):
 
     def test_exception_serialization(self):
         """
-        Trying to deserialize an object but instead we got a error response => 
+        Trying to deserialize an object but instead we got a error response =>
         object with filled exception and is_success == False
         """
         json = '{"requestError":{"policyException":{"text":"Request URI missing required component(s): ","messageId":"SVC0002","variables":["aaa"]}}}';
@@ -101,7 +101,7 @@ class Tests(mod_unittest.TestCase):
         self.assertEquals(result.exception.variables[0], 'aaa')
 
     def test_client_correlator(self):
-        json = '{"resourceReference":{"resourceURL":"http://test.com/1/smsmessaging/outbound/38598123456/requests/hzmrjiywg5"}}'
+        json = '{"resourceReference":{"resourceURL":"http://test.com/1/smsmessaging/outbound/38598123456/requests/hzmrjiywg5"}, "clientCorrelator":"hzmrjiywg5"}'
 
         result = mod_object.Conversions.from_json(mod_models.ResourceReference, json, is_error=False)
 
