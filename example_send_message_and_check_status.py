@@ -48,7 +48,7 @@ sms.notify_url = 'Any URL'
 
 # example:send-message
 result = sms_client.send_sms(sms, header, data_format)
-if result == False:
+if not result:
     print 'Error sending message'
     sys.exit(1)
 
