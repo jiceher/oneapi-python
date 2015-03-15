@@ -49,7 +49,7 @@ sms.sender_address = args.sender
 sms.address = args.address
 sms.message = 'AxelF:d=4,o=5,b=125:32p,8g,8p,16a#.,8p,16g,16p,16g,8c6, 8g,8f,8g,8p,16d.6,8p,16g,16p,16g,8d#6,8d6,8a#,8g,8d6,8g6, 16g,16f,16p,16f,8d,8a#,2g,p,SS,16f6,8d6,8c6,8a#,g,8a#.,16g,16p,16g,8c6,8g,8f,g,8d.6,16g,16p,16g,8d#6,8d6,8a#,8g,8d6, 8g6,16g,16f,16p,16f,8d,8a#,2g'
 sms.callback_data = 'Any string'
-sms.notify_url = 'Any URL'
+sms.notify_url = 'http://example.com/'
 # ----------------------------------------------------------------------------------------------------
 
 # example:send-message
