@@ -289,6 +289,63 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.ResourceReference, result, not is_success)
 
+    def send_ringtone_sms(self, sms, header=None, data_format=None, sms_format='Ems'):
+        if not data_format: data_format='json'
+
+        client_correlator = sms.client_correlator
+        if not client_correlator:
+            client_correlator = mod_utils.get_random_alphanumeric_string()
+
+        if data_format == "json":
+            params = {
+                    'address' : [
+                        'tel:{0}'.format(sms.address)
+                        ],
+                    'clientCorrelator': client_correlator,
+                    'senderAddress': sms.sender_address,
+                    'outboundSMSRingToneMessage' : {
+                        'ringTone' : sms.message,
+                        'smsFormat': sms_format,
+                        },
+                    'senderName': 'tel:{0}'.format(sms.sender_address),
+                    'receiptRequest' : {
+                        'callbackData': sms.callback_data,
+                        'notifyURL': sms.notify_url
+                        }
+                    }
+        elif data_format == "url":
+            params = {
+                    'senderAddress': sms.sender_address,
+                    'address': sms.address,
+                    'ringTone': sms.message,
+                    'smsFormat': sms_format,
+                    'clientCorrelator': client_correlator,
+                    'senderName': 'tel:{0}'.format(sms.sender_address),
+                    }
+
+            if sms.mo_response_key:
+                params['moResponseKey'] = sms.mo_response_key
+
+            if sms.notify_url:
+                params['notifyURL'] = sms.notify_url
+
+            if sms.callback_data:
+                params['callbackData'] = sms.callback_data
+        else:
+            raise Exception("invalid asked data format (supported url or json")
+
+        is_success, result = self.execute_POST(
+                '/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+                params = params,
+                headers = header,
+                data_format = data_format
+        )
+
+        if not is_success:
+            return is_success
+
+        return self.create_from_json(mod_models.ResourceReference, result, not is_success)
+
     def query_delivery_status(self, client_correlator_or_resource_reference, sender):
         if hasattr(client_correlator_or_resource_reference, 'client_correlator'):
             client_correlator = client_correlator_or_resource_reference.client_correlator
