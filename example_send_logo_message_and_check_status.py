@@ -23,6 +23,7 @@ parser.add_argument("-d", "--data_format", help="Type of data used in request, c
 parser.add_argument("-a", "--accept", help="Type of data used for response, can be url or json (default=url)")
 parser.add_argument("-f", "--sms_format", help="Type os SMS Format used in SmsFormat converstion enumeration (default=Ems)")
 parser.add_argument("-i", "--image", help="Image to be sent as logo SMS")
+parser.add_argument("-l", "--is_legacy", help="Support pre 2013 OMA specifications for URI", action='store_true')
 args = parser.parse_args()
 
 data_format = "url"
@@ -59,7 +60,7 @@ sms.notify_url = 'http://example.com'
 # ----------------------------------------------------------------------------------------------------
 
 # example:send-message
-result = sms_client.send_logo_sms(sms, header, data_format, sms_format)
+result = sms_client.send_logo_sms(sms, header, data_format, sms_format, args.is_legacy)
 if not result:
     print 'Error sending message'
     sys.exit(1)

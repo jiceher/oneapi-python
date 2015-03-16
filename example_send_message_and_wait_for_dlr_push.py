@@ -23,6 +23,7 @@ parser.add_argument("-p", "--port", help="local port for delivery notification")
 parser.add_argument("-d", "--data_format", help="Type of data used in request, can be url or json (default=url)")
 parser.add_argument("-a", "--accept", help="Type of data used for response, can be url or json (default=url)")
 parser.add_argument("-i", "--ipv4", help="Use strict ipv4 address", action="store_true")
+parser.add_argument("-l", "--is_legacy", help="Support pre 2013 OMA specifications for URI", action='store_true')
 args = parser.parse_args()
 
 data_format = "url"
@@ -54,7 +55,7 @@ else:
 sms.callback_data = 'any+string'
 # ----------------------------------------------------------------------------------------------------
 
-result = sms_client.send_sms(sms, header, data_format)
+result = sms_client.send_sms(sms, header, data_format, args.is_legacy)
 
 if not result:
     print 'Error sending message'

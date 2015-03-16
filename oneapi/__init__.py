@@ -179,8 +179,9 @@ class SmsClient(AbstractOneApiClient):
     def __init__(self, username, password, base_url=None):
         AbstractOneApiClient.__init__(self, username, password, base_url=base_url)
 
-    def send_sms(self, sms, header=None, data_format=None):
+    def send_sms(self, sms, header=None, data_format=None, is_legacy=None):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         client_correlator = sms.client_correlator
         if not client_correlator:
@@ -222,8 +223,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address)
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address)
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format
@@ -234,8 +240,9 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.ResourceReference, result, not is_success)
 
-    def send_flash_sms(self, sms, header=None, data_format=None):
+    def send_flash_sms(self, sms, header=None, data_format=None, is_legacy=None):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         client_correlator = sms.client_correlator
         if not client_correlator:
@@ -277,8 +284,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address),
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format
@@ -289,8 +301,9 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.ResourceReference, result, not is_success)
 
-    def send_ringtone_sms(self, sms, header=None, data_format=None, sms_format='Ems'):
+    def send_ringtone_sms(self, sms, header=None, data_format=None, is_legacy=None, sms_format='Ems'):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         client_correlator = sms.client_correlator
         if not client_correlator:
@@ -334,8 +347,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address)
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address)
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format
@@ -346,8 +364,9 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.ResourceReference, result, not is_success)
 
-    def send_logo_sms(self, sms, header=None, data_format=None, sms_format='Ems'):
+    def send_logo_sms(self, sms, header=None, data_format=None, is_legacy=None, sms_format='Ems'):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         client_correlator = sms.client_correlator
         if not client_correlator:
@@ -391,8 +410,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address)
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address)
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format
@@ -403,11 +427,12 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.ResourceReference, result, not is_success)
 
-    def query_delivery_status(self, client_correlator_or_resource_reference, sender):
+    def query_delivery_status(self, client_correlator_or_resource_reference, sender, is_legacy=None):
         if hasattr(client_correlator_or_resource_reference, 'client_correlator'):
             client_correlator = client_correlator_or_resource_reference.client_correlator
         else:
             client_correlator = client_correlator_or_resource_reference
+        if is_legacy == None: is_legacy=True
 
         client_correlator = self.get_client_correlator(client_correlator)
 
@@ -415,8 +440,13 @@ class SmsClient(AbstractOneApiClient):
             'clientCorrelator': client_correlator,
         }
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/requests/{1}/deliveryInfos'.format(sender, client_correlator)
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/requests/{1}/deliveryInfos'.format(sender, client_correlator)
+
         is_success, result = self.execute_GET(
-                '/1/smsmessaging/outbound/{0}/requests/{1}/deliveryInfos'.format(sender, client_correlator),
+                tmp,
                 params = params
         )
 
@@ -426,16 +456,22 @@ class SmsClient(AbstractOneApiClient):
         # TODO: Simplify the resulting object
         return self.create_from_json(mod_models.DeliveryInfoList, result, not is_success)
 
-    def retrieve_inbound_messages(self, max_number=None):
+    def retrieve_inbound_messages(self, max_number=None, is_legacy=None):
         if not max_number or max_number < 0:
             max_number = 100
+        if is_legacy == None: is_legacy=True
 
         params = {
                 'maxBatchSize': max_number,
         }
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/inbound/registrations/INBOUND/messages'
+        else:
+            tmp='/smsmessaging/v1/inbound/registrations/INBOUND/messages'
+
         is_success, result = self.execute_GET(
-                '/1/smsmessaging/inbound/registrations/INBOUND/messages', 
+                tmp,
                 params
         )
 
@@ -444,8 +480,9 @@ class SmsClient(AbstractOneApiClient):
 
         return self.create_from_json(mod_models.InboundSmsMessages, result, not is_success)
 
-    def subscribe_delivery_status(self, sms, header=None, data_format=None):
+    def subscribe_delivery_status(self, sms, header=None, data_format=None, is_legacy=None):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         if data_format == "json":
             params = {
@@ -466,9 +503,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/outbound/{0}/subscriptions'.format(sms.sender_address)
+        else:
+            tmp='/smsmessaging/v1/outbound/{0}/subscriptions'.format(sms.sender_address),
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/outbound/'
-                '{0}/subscriptions'.format(sms.sender_address),
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format
@@ -488,8 +529,9 @@ class SmsClient(AbstractOneApiClient):
 
         return is_success
 
-    def subscribe_messages_sent_notification(self, sms, header=None, data_format=None):
+    def subscribe_messages_sent_notification(self, sms, header=None, data_format=None, is_legacy=None):
         if not data_format: data_format='json'
+        if is_legacy == None: is_legacy=True
 
         if data_format == "json":
             params = {
@@ -517,8 +559,13 @@ class SmsClient(AbstractOneApiClient):
         else:
             raise Exception("invalid asked data format (supported url or json")
 
+        if is_legacy == True:
+            tmp='/1/smsmessaging/inbound/subscriptions'
+        else:
+            tmp='/smsmessaging/v1/inbound/subscriptions'
+
         is_success, result = self.execute_POST(
-                '/1/smsmessaging/inbound/subscriptions',
+                tmp,
                 params = params,
                 headers = header,
                 data_format = data_format

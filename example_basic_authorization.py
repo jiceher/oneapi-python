@@ -3,7 +3,6 @@ Example basic authorization WITHOUT the library.
 """
 import json
 import urllib2
-import requests
 import base64
 
 username = 'your_username_here'

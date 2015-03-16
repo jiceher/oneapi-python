@@ -15,7 +15,7 @@ password = sys.argv[2]
 sms_client = oneapi.SmsClient(username, password);
 
 data_connection_client = oneapi.DataConnectionProfileClient(username, 'wrongpassword');
-data_connection_client.client()
+#data_connection_client.client()
 
 print 'sms_client validity is ', sms_client.is_valid()
 print 'data_connection_client validity is ', data_connection_client.is_valid()

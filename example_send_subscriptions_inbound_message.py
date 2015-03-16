@@ -21,6 +21,7 @@ parser.add_argument("address", help="Destination address")
 parser.add_argument("-p", "--port", help="local port for delivery notification")
 parser.add_argument("-d", "--data_format", help="Type of data used in request, can be url or json (default=url)")
 parser.add_argument("-a", "--accept", help="Type of data used for response, can be url or json (default=url)")
+parser.add_argument("-l", "--is_legacy", help="Support pre 2013 OMA specifications for URI", action='store_true')
 args = parser.parse_args()
 
 data_format = "url"
@@ -50,7 +51,7 @@ sms.filter_criteria = "py_test_"+mod_utils.get_random_alphanumeric_string()
 # ----------------------------------------------------------------------------------------------------
 
 # example:send-message
-result = sms_client.subscribe_messages_sent_notification(sms, header, data_format)
+result = sms_client.subscribe_messages_sent_notification(sms, header, data_format, args.is_legacy)
 # store client correlator because we can later query for the delivery status with it:
 resource_url = result.resource_url
 # ----------------------------------------------------------------------------------------------------
