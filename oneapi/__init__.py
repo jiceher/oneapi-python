@@ -285,9 +285,9 @@ class SmsClient(AbstractOneApiClient):
             raise Exception("invalid asked data format (supported url or json")
 
         if is_legacy == True:
-            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address),
+            tmp='/1/smsmessaging/outbound/{0}/requests'.format(sms.sender_address)
         else:
-            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address),
+            tmp='/smsmessaging/v1/outbound/{0}/requests'.format(sms.sender_address)
 
         is_success, result = self.execute_POST(
                 tmp,
