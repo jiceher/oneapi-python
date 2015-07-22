@@ -67,7 +67,7 @@ if not result.is_success():
 
 print result
 print 'Is success = ', result.is_success()
-print 'Client correlator = ', result.client_correlator
+print 'Request ID = ', result.request_id
 
 # Wait for 15 seconds for push-es
 server = dummyserver.DummyWebServer(port)

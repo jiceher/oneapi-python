@@ -59,15 +59,15 @@ if not result.is_success():
 
 print result
 # store client correlator because we can later query for the delivery status with it:
-client_correlator = result.client_correlator
+request_id = result.request_id
 print 'Is success = ', result.is_success()
 print 'Sender = ', result.sender
-print 'Client correlator = ', result.client_correlator
+print 'Request ID = ', result.request_id
 
 # Few seconds later we can check for the sending status
 time.sleep(10)
 
 # example:query-for-delivery-status
-query_status = sms_client.query_delivery_status(client_correlator, args.sender)
+query_status = sms_client.query_delivery_status(request_id, args.sender)
 delivery_status = query_status.delivery_info[0].delivery_status
 # ----------------------------------------------------------------------------------------------------
