@@ -69,5 +69,13 @@ time.sleep(10)
 
 # example:query-for-delivery-status
 query_status = sms_client.query_delivery_status(request_id, args.sender)
+if not query_status:
+    print 'Error sending delivery status'
+    sys.exit(1)
+
+if not query_status.is_success():
+    print 'Error sending delivery status:', query_status.exception
+    sys.exit(1)
+
 delivery_status = query_status.delivery_info[0].delivery_status
 # ----------------------------------------------------------------------------------------------------
